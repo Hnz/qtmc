@@ -1,0 +1,10 @@
+
+[Desktop Entry]
+Name=QtMC
+Comment=CMake build system framework for Qt apps.
+Exec=qtmc %U
+Icon=qtmc
+Terminal=false
+Type=Application
+Categories=AudioVideoEditing;AudioVideo;Qt;
+Name[en_IN]=qtmc.desktop

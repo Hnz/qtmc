@@ -1,0 +1,22 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/FileBrowser.qml</file>
+        <file>qml/main.qml</file>
+        <file>qml/Player.qml</file>
+        <file>qml/Slider.qml</file>
+        <file>qml/Widget.qml</file>
+        <file>icons/media-playback-pause.png</file>
+        <file>icons/media-playback-start.png</file>
+        <file>icons/media-playback-stop.png</file>
+        <file>icons/arrow-down.png</file>
+        <file>icons/arrow-up.png</file>
+        <file>icons/joystick.png</file>
+        <file>icons/system-shutdown.png</file>
+        <file>icons/tv.png</file>
+        <file>icons/video-television.png</file>
+        <file>icons/rss.png</file>
+        <file>icons/settings.png</file>
+        <file>icons/feed-subscribe.png</file>
+        <file>icons/speaker.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,10 @@
+#ifndef QTMC_GLOBAL_H
+#define QTMC_GLOBAL_H
+
+// Program version
+#define QTMC_VERSION "@CPACK_PACKAGE_VERSION@"
+
+// SCM revision
+#define QTMC_REVISION "@REVISION@"
+
+#endif // QTMC_GLOBAL_H
