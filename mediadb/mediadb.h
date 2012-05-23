@@ -21,7 +21,9 @@
 
 #include <QtCore>
 
-class MediaDB {
+class MediaDB : public QObject
+{
+    Q_OBJECT
 public:
     MediaDB();
     QString version();
