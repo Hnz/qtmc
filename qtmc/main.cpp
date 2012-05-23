@@ -17,7 +17,10 @@
  */
 
 #include <QtGui/QApplication>
+#include <QtDeclarative/QDeclarativeContext>
+#include <QtDeclarative/QDeclarativeEngine>
 #include <QtDeclarative/QDeclarativeView>
+#include <QtSql/QSqlDatabase>
 #include <QTranslator>
 #include "qtmc.h"
 #include "../mediadb/mediadb.h"
@@ -29,19 +32,52 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
-    MediaDB *mediadb = new MediaDB();
-    qDebug() << "MediaDB version" << mediadb->version() << QString(QTMC_VERSION);
+    // Load settings
+    QSettings settings;
+    settings.setValue("dbtype", "QSQLITE");
+    settings.setValue("dbname", "/tmp/testdb.sqlite3");
 
+    qDebug() << settings.value("dbtype");
+
+    // Open database
+    QSqlDatabase db = QSqlDatabase::addDatabase(settings.value("dbtype").toString());
+    db.setDatabaseName(settings.value("dbtype").toString());
+    //db.setDatabaseName(":memory:");
+
+    // Check if database is open
+    if (!db.open()) {
+        qWarning() << app.tr("Cannot open database"),
+            app.tr("Unable to establish a database connection.\n"
+                    "This example needs SQLite support. Please read "
+                    "the Qt SQL driver documentation for information how "
+                    "to build it.\n\n"
+                    "Click Cancel to exit.");
+        return 1;
+    }
+
+    // Create mediadb
+    MediaDB *mediadb = new MediaDB();
+    qDebug() << "QtMC version" << QString(QTMC_VERSION);
+    qDebug() << "MediaDB version" << mediadb->version();
+
+    // Translator
     QTranslator translator;
     QString lang = "fr_FR";
     translator.load( TS_PREFIX + lang, ":/ts/");
     app.installTranslator(&translator);
 
+    // Create qml-view and connect quit-signal
     QDeclarativeView *view = new QDeclarativeView;
+    QObject::connect(view->engine(), SIGNAL(quit()), view, SLOT(close()));
+
+    // Expose c++ object to qml
+    QDeclarativeContext *ctxt = view->rootContext();
+    ctxt->setContextProperty("MediaDB", mediadb);
+    ctxt->setContextProperty("Settings", &settings);
+
+    // Run view
     view->setSource(QUrl("qrc:/qml/main.qml"));
     view->show();
 
-    //QtMC w;
-    //w.show();
     return app.exec();
 }
