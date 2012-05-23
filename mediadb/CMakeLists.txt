@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 project(mediadb)
-find_package(Qt4 REQUIRED)
+find_package(Qt4 COMPONENTS QtCore QtSql REQUIRED)
 include(${QT_USE_FILE})
 
 # Define the MOC source files used by mediadb
