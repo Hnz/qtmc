@@ -40,7 +40,7 @@ Fedora 16
     wget http://download.opensuse.org/repositories/home:/Hanzzzz:/qtmc/Fedora_16/home:Hanzzzz:qtmc.repo
     yum install qtmc
 
-OpenSuse 12.1
+OpenSUSE 12.1
 -------------
 
     zypper ar http://download.opensuse.org/repositories/home:/Hanzzzz:/qtmc/openSUSE_12.1/home:Hanzzzz:qtmc.repo
