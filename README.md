@@ -49,8 +49,10 @@ OpenSUSE 12.1
 Ubuntu 12.04
 ------------
 
-    echo "deb http://download.opensuse.org/repositories/home:/Hanzzzz:/qtmc/xUbuntu_12.04/ ./" > \
-    /etc/apt/sources.list.d/qtmc.list
+    echo "deb http://download.opensuse.org/repositories/home:/Hanzzzz:/qtmc/xUbuntu_12.04/ ./" \
+    > /etc/apt/sources.list.d/qtmc.list
+    wget -qO- http://download.opensuse.org/repositories/home:/Hanzzzz:/qtmc/xUbuntu_12.04/Release.key \
+    | apt-key add -
     apt-get update
     apt-get install qtmc
 
