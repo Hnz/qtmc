@@ -32,5 +32,8 @@ install(TARGETS qtmc
 # Install share directory
 install(DIRECTORY ../lib DESTINATION ${CMAKE_INSTALL_PREFIX})
 
+# Install manpage
+install(FILES qtmc.1 DESTINATION ${CMAKE_INSTALL_PREFIX}/share/man/man1)
+
 # Install translations
 install(FILES ${qtmc_QM} DESTINATION ${CMAKE_INSTALL_PREFIX}/lib/qtmc/translations)
