@@ -1,4 +1,3 @@
-// import QtQuick 1.0 // to target S60 5th Edition or Maemo 5
 import QtQuick 1.1
 
 Player {
@@ -20,7 +19,7 @@ Player {
             focus: true
             anchors.centerIn: parent
             color: "white"
-            text: "Search..."
+            text: qsTr("Search")
             font.family: "Droid Sans"
             font.bold: false
             font.pixelSize: 25

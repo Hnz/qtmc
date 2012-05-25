@@ -65,11 +65,21 @@ Use the following command to generate a source archive:
     make package_source
 
 
+Translation
+===========
+
+To update the translation, run the following command:
+
+    lupdate-qt4 . -ts translations/qtmc_nl.ts
+
+Then, edit the file _translations/qtmc_nl.ts using Qt Linguist.
+
+_**Note**: lupdate is sometimes named lupdate-qt4_
+
+
 License
 =======
 
-*Copyright 2012 Hans van Leeuwen <hansvl@gmail.com>*
+_Copyright 2012 Hans van Leeuwen <hansvl@gmail.com>_
 
 QtMC is LGPLv3-licensed. See LICENSE-file for details
-
-

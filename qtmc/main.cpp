@@ -26,8 +26,6 @@
 #include "../mediadb/mediadb.h"
 #include "../qtmc_global.h"
 
-#define TS_PREFIX "qtmc_"
-
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -37,34 +35,30 @@ int main(int argc, char *argv[])
     settings.setValue("dbtype", "QSQLITE");
     settings.setValue("dbname", "/tmp/testdb.sqlite3");
 
-    qDebug() << settings.value("dbtype");
+    // Translator
+    QString translationfile = QString("qtmc_nl");
+    QTranslator translator;
+    if (!translator.load(translationfile) &&
+        !translator.load(translationfile, "../lib/qtmc/translations/")) {
+        qWarning() << "Failed to load translation file";
+    }
+    app.installTranslator(&translator);
 
     // Open database
     QSqlDatabase db = QSqlDatabase::addDatabase(settings.value("dbtype").toString());
-    db.setDatabaseName(settings.value("dbtype").toString());
+    db.setDatabaseName(settings.value("dbname").toString());
     //db.setDatabaseName(":memory:");
 
     // Check if database is open
     if (!db.open()) {
-        qWarning() << app.tr("Cannot open database"),
-            app.tr("Unable to establish a database connection.\n"
-                    "This example needs SQLite support. Please read "
-                    "the Qt SQL driver documentation for information how "
-                    "to build it.\n\n"
-                    "Click Cancel to exit.");
+        qWarning() << app.tr("Cannot open database") << settings.value("dbname");
         return 1;
     }
 
     // Create mediadb
     MediaDB *mediadb = new MediaDB();
-    qDebug() << "QtMC version" << QString(QTMC_VERSION);
-    qDebug() << "MediaDB version" << mediadb->version();
-
-    // Translator
-    QTranslator translator;
-    QString lang = "fr_FR";
-    translator.load( TS_PREFIX + lang, ":/ts/");
-    app.installTranslator(&translator);
+    qDebug() << app.tr("QtMC version") << QString(QTMC_VERSION);
+    qDebug() << app.tr("MediaDB version") << mediadb->version();
 
     // Create qml-view and connect quit-signal
     QDeclarativeView *view = new QDeclarativeView;
@@ -76,7 +70,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("Settings", &settings);
 
     // Run view
-    view->setSource(QUrl("qrc:/qml/main.qml"));
+    view->setSource(QUrl("../lib/qtmc/qml/main.qml"));
     view->show();
 
     return app.exec();
