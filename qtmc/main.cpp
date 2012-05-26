@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
     QString translationfile = QString("qtmc_nl");
     QTranslator translator;
     if (!translator.load(translationfile) &&
-        !translator.load(translationfile, "../lib/qtmc/translations/")) {
+        !translator.load(translationfile,
+                         app.applicationDirPath() +  "../lib/qtmc/translations/")) {
         qWarning() << "Failed to load translation file";
     }
     app.installTranslator(&translator);
@@ -70,7 +71,7 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("Settings", &settings);
 
     // Run view
-    view->setSource(QUrl("../lib/qtmc/qml/main.qml"));
+    view->setSource(QUrl(app.applicationDirPath() + "/../lib/qtmc/qml/main.qml"));
     view->show();
 
     return app.exec();
