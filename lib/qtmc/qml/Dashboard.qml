@@ -19,8 +19,13 @@
 import QtQuick 1.1
 
 Rectangle {
-    color: "black"
-    anchors.margins: 10
-    opacity: 0.7
-    radius: 10
+    color: "transparent"
+    anchors.fill: parent
+    Text {
+        text: "This software is Bleeding Edge Alpha.\nDon't cut yourself!"
+        font.pixelSize: 15
+        font.family: "URW Gothic L"
+        font.bold: true
+        color: "red"
+    }
 }

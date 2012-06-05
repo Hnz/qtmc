@@ -71,8 +71,9 @@ int main(int argc, char *argv[])
     ctxt->setContextProperty("Settings", &settings);
 
     // Run view
-    view->setSource(QUrl(app.applicationDirPath() + "/../lib/qtmc/qml/main.qml"));
+    view->setSource(QUrl(app.applicationDirPath() + "/../lib/qtmc/qml/QtMC.qml"));
     view->show();
+    //view->showFullScreen();
 
     return app.exec();
 }

@@ -2,7 +2,7 @@
 # Project Info
 project("QtMC")
 set(CPACK_PACKAGE_NAME "qtmc")
-set(CPACK_PACKAGE_VERSION "0.0.1")
+set(CPACK_PACKAGE_VERSION "0.0.2")
 set(CPACK_PACKAGE_DESCRIPTION "Media Center based on Qt")
 
 

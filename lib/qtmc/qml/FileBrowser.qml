@@ -19,13 +19,14 @@
 import QtQuick 1.1
 import Qt.labs.folderlistmodel 1.0
 
-Rectangle {
+Item {
     id: fileBrowser
-    width: 400
-    height: 400
-    Rectangle {
+
+    signal fileSelected(string path)
+
+    Item {
         id: fileViewHeader
-        color: "#531010"
+        //color: "#531010"
         height: 50
         anchors.top: parent.top
         anchors.right: parent.right
@@ -33,6 +34,8 @@ Rectangle {
         Text {
             id: currentFolder
             text: folderModel.folder
+            color: "white"
+            font.pixelSize: 25
             anchors.left: parent.left
             //anchors.right: parentFolder.left
         }
@@ -72,6 +75,8 @@ Rectangle {
             id: fileDelegate
             Text {
                 text: fileName
+                color: "white"
+                font.pixelSize: 15
                 MouseArea {
                     anchors.fill: parent
                     hoverEnabled: true
@@ -80,13 +85,10 @@ Rectangle {
                     }
                     onClicked: {
                         var path = folderModel.folder + "/" + fileView.currentItem.text
-                        console.log("Clicked on " + path + fileView.currentIndex)
                         if (folderModel.isFolder(fileView.currentIndex)) {
                             folderModel.folder = path
                         } else {
-                            console.log("Playing " + path)
-                            fileBrowserWidget.visible = false
-                            player.play(path)
+                            fileSelected(path)
                         }
                     }
                 }

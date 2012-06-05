@@ -19,8 +19,10 @@
 import QtQuick 1.1
 
 Rectangle {
-    color: "black"
-    anchors.margins: 10
-    opacity: 0.7
-    radius: 10
+    color: "transparent"
+    anchors.fill: parent
+    Text {
+        text: Date.now()
+        color: "blue"
+    }
 }

@@ -19,89 +19,158 @@
 import QtQuick 1.1
 import QtMultimediaKit 1.1
 
-Rectangle {
+Item {
+    id: player
 
-    function play(source){
-        videoPlayer.source = source
-        videoPlayer.play()
+    function isImage(extention) {
+        for (var image_extention in ['jpg', 'gif', 'png']) {
+            if (extention === image_extention) {
+                return true
+            }
+        }
+        return false
     }
 
-    Text {
-        id: info
-        text: qsTr("text")
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+    function play(source) {
+        var extention = source.split('.').pop();
+
+        if (isImage(source)) {
+            imagePlayer.visible = true
+            imagePlayer.source = source
+        } else {
+            imagePlayer.visible = false
+            videoPlayer.source = source
+            videoPlayer.play()
+        }
+    }
+
+    Image {
+        id: imagePlayer
+        anchors.fill: parent
+        visible: false
+        fillMode: Image.Stretch
     }
 
     Video {
         id: videoPlayer
-        anchors.top: info.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: playerControlBar.top
-        Keys.onSpacePressed: player.paused = !player.paused
-        Keys.onLeftPressed: player.position -= 5000
-        Keys.onRightPressed: player.position += 5000
+        focus: true
+        visible: true
+        anchors.fill: parent
+        Keys.onSpacePressed: videoPlayer.paused = !videoPlayer.paused
+        Keys.onLeftPressed: videoPlayer.position -= 5000
+        Keys.onRightPressed: videoPlayer.position += 5000
         source: "/home/hanz/Videos/sintel_trailer-720p.ogv"
-    }
 
-    Rectangle {
-        id: playerControlBar
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        color: "grey"
-        height: 50
+        Timer {
+            id: hidePlayerControlBar
+            interval: 2000
+            onTriggered: playerControlBar.visible = false
+        }
 
-        Image {
-            id: playicon
-            source: "../icons/media-playback-start.png"
+        MouseArea {
+            anchors.fill: parent
+            onDoubleClicked: videoPlayer.paused = !videoPlayer.paused
+            onMousePositionChanged: {
+                playerControlBar.visible = true
+                hidePlayerControlBar.start()
+            }
+        }
+
+        Rectangle {
+            id: playerControlBar
+            visible: false
             anchors.left: parent.left
-            anchors.bottom: parent.bottom
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    videoPlayer.play()
-                }
-            }
-        }
-
-        Image {
-            id: pauseicon
-            source: "../icons/media-playback-pause.png"
-            anchors.left: playicon.right
-            anchors.bottom: parent.bottom
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    videoPlayer.pause()
-                }
-            }
-        }
-
-        Image {
-            id: stopicon
-            source: "../icons/media-playback-stop.png"
-            anchors.left: pauseicon.right
-            anchors.bottom: parent.bottom
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    videoPlayer.stop()
-                }
-            }
-        }
-
-        Slider {
-            id: videoSlider
-            anchors.left: stopicon.right
             anchors.right: parent.right
-            anchors.top: parent.top
             anchors.bottom: parent.bottom
-            anchors.margins: 10
-            onValueChanged: {
-                console.log("PP")
+            color: "grey"
+            height: 50
+
+            Image {
+                id: playicon
+                source: "../icons/media-playback-start.png"
+                anchors.left: parent.left
+                anchors.bottom: parent.bottom
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        videoPlayer.play()
+                    }
+                }
+            }
+
+            Image {
+                id: pauseicon
+                source: "../icons/media-playback-pause.png"
+                anchors.left: playicon.right
+                anchors.bottom: parent.bottom
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        videoPlayer.pause()
+                    }
+                }
+            }
+
+            Image {
+                id: stopicon
+                source: "../icons/media-playback-stop.png"
+                anchors.left: pauseicon.right
+                anchors.bottom: parent.bottom
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        videoPlayer.stop()
+                    }
+                }
+            }
+
+            Item {
+                id: slider; width: 400; height: 16
+
+                // value is read/write.
+                property real value: 1
+                onValueChanged: updatePos();
+                property real maximum: 1
+                property real minimum: 1
+                property int xMax: width - handle.width - 4
+                onXMaxChanged: updatePos();
+                onMinimumChanged: updatePos();
+
+                function updatePos() {
+                    if (maximum > minimum) {
+                        var pos = 2 + (value - minimum) * slider.xMax / (maximum - minimum);
+                        pos = Math.min(pos, width - handle.width - 2);
+                        pos = Math.max(pos, 2);
+                        handle.x = pos;
+                    } else {
+                        handle.x = 2;
+                    }
+                }
+
+                Rectangle {
+                    anchors.fill: parent
+                    border.color: "white"; border.width: 0; radius: 8
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: "#66343434" }
+                        GradientStop { position: 1.0; color: "#66000000" }
+                    }
+                }
+
+                Rectangle {
+                    id: handle; smooth: true
+                    y: 2; width: 30; height: slider.height-4; radius: 6
+                    gradient: Gradient {
+                        GradientStop { position: 0.0; color: "lightgray" }
+                        GradientStop { position: 1.0; color: "gray" }
+                    }
+
+                    MouseArea {
+                        id: mouse
+                        anchors.fill: parent; drag.target: parent
+                        drag.axis: Drag.XAxis; drag.minimumX: 2; drag.maximumX: slider.xMax+2
+                        onPositionChanged: { value = (maximum - minimum) * (handle.x-2) / slider.xMax + minimum; }
+                    }
+                }
             }
         }
     }
