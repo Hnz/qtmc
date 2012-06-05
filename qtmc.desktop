@@ -1,10 +1,10 @@
 
 [Desktop Entry]
 Name=QtMC
+GenericName=Media Center
 Comment=Media Center build using Qt
 Exec=qtmc %U
 Icon=qtmc
 Terminal=false
 Type=Application
-Categories=AudioVideo
-Name[en_EN]=qtmc.desktop
+Categories=AudioVideo;Player;Qt;
